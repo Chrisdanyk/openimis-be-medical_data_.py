@@ -1,5 +1,6 @@
 import logging
 import graphene
+from graphql_jwt.exceptions import PermissionDenied
 
 from insuree.models import Insuree
 from core.schema import OpenIMISMutation
@@ -11,6 +12,7 @@ from graphene import Mutation
 
 from location.models import HealthFacility
 
+from .apps import MedicalDataConfig
 from .gql_queries import UpdateMedicalRecordInputType, \
     CreateMedicalRecordInputType
 from .models import MedicalRecord
@@ -35,8 +37,13 @@ class CreateMedicalRecordMutation(OpenIMISMutation):
     @classmethod
     def async_mutate(cls, user, **data):
         try:
-            if not user.id:
-                raise ValidationError("Authentication required")
+            if type(user) is AnonymousUser or not user.id:
+                raise ValidationError(
+                    _("mutation.authentication_required"))
+            if not user.has_perms(
+                    MedicalDataConfig\
+                            .gql_mutation_create_medical_record_perms):
+                raise PermissionDenied(_("unauthorized"))
             health_facility_uuid = data.pop('health_facility_uuid')
             insuree_uuid = data.pop('insuree_uuid')
             health_facility = HealthFacility.objects.filter(
@@ -73,9 +80,10 @@ class UpdateMedicalRecordMutation(OpenIMISMutation):
             if type(user) is AnonymousUser or not user.id:
                 raise ValidationError(
                     _("mutation.authentication_required"))
-            # if not user.has_perms(
-            # InsureeConfig.gql_mutation_update_families_perms):
-            #     raise PermissionDenied(_("unauthorized"))
+            if not user.has_perms(
+                    MedicalDataConfig\
+                            .gql_mutation_update_medical_record_perms):
+                raise PermissionDenied(_("unauthorized"))
             data['audit_user_id'] = user.id_for_audit
             # client_mutation_id = data.get("client_mutation_id")
             update_or_create_medical_record(data, user)
@@ -99,6 +107,13 @@ class DeleteMedicalRecordMutation(Mutation):
 
     def mutate(self, info, id):
         try:
+            user = info.context.user
+            if type(user) is AnonymousUser or not user.id:
+                raise ValidationError(
+                    _("mutation.authentication_required"))
+            if not user.has_perms(
+                    MedicalDataConfig.gql_mutation_delete_medical_record_perms):
+                raise PermissionDenied(_("unauthorized"))
             obj = MedicalRecord.objects.filter(id=id).first()
             if obj:
                 obj.delete()
