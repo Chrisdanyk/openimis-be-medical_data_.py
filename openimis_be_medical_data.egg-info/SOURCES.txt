@@ -1,0 +1,16 @@
+LICENSE.md
+README.md
+setup.py
+medical_data/__init__.py
+medical_data/admin.py
+medical_data/apps.py
+medical_data/models.py
+medical_data/tests.py
+medical_data/urls.py
+medical_data/views.py
+medical_data/migrations/__init__.py
+openimis_be_medical_data.egg-info/PKG-INFO
+openimis_be_medical_data.egg-info/SOURCES.txt
+openimis_be_medical_data.egg-info/dependency_links.txt
+openimis_be_medical_data.egg-info/requires.txt
+openimis_be_medical_data.egg-info/top_level.txt
