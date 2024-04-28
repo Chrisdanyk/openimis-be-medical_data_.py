@@ -1,5 +1,3 @@
-import warnings
-
 from django.test import TestCase
 from location.models import HealthFacility
 
@@ -11,12 +9,9 @@ class MedicalDataModelTest(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        insuree = Insuree.objects.create(name="Test Insuree")
-        health_facility = HealthFacility.objects.create(name="Test Facility")
-
-    def test_dummy(self):
-        self.assertTrue(True)
-
+        cls.insuree = Insuree.objects.create(name="Test Insuree")
+        cls.health_facility = HealthFacility.objects.create(
+            name="Test Facility")
 
     def test_create_medical_record(self):
         medical_record = MedicalRecord.objects.create(

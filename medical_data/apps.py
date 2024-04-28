@@ -8,6 +8,7 @@ DEFAULT_CFG = {
     "gql_mutation_delete_medical_record_perms": ["100201"],
 }
 
+
 class MedicalDataConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = MODULE_NAME

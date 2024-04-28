@@ -41,8 +41,8 @@ class CreateMedicalRecordMutation(OpenIMISMutation):
                 raise ValidationError(
                     _("mutation.authentication_required"))
             if not user.has_perms(
-                    MedicalDataConfig\
-                            .gql_mutation_create_medical_record_perms):
+                MedicalDataConfig
+                    .gql_mutation_create_medical_record_perms):
                 raise PermissionDenied(_("unauthorized"))
             health_facility_uuid = data.pop('health_facility_uuid')
             insuree_uuid = data.pop('insuree_uuid')
@@ -81,8 +81,8 @@ class UpdateMedicalRecordMutation(OpenIMISMutation):
                 raise ValidationError(
                     _("mutation.authentication_required"))
             if not user.has_perms(
-                    MedicalDataConfig\
-                            .gql_mutation_update_medical_record_perms):
+                MedicalDataConfig
+                    .gql_mutation_update_medical_record_perms):
                 raise PermissionDenied(_("unauthorized"))
             data['audit_user_id'] = user.id_for_audit
             # client_mutation_id = data.get("client_mutation_id")
@@ -112,7 +112,8 @@ class DeleteMedicalRecordMutation(Mutation):
                 raise ValidationError(
                     _("mutation.authentication_required"))
             if not user.has_perms(
-                    MedicalDataConfig.gql_mutation_delete_medical_record_perms):
+                MedicalDataConfig
+                    .gql_mutation_delete_medical_record_perms):
                 raise PermissionDenied(_("unauthorized"))
             obj = MedicalRecord.objects.filter(id=id).first()
             if obj:
